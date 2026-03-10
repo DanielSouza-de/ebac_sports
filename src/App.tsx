@@ -1,8 +1,13 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+
 import Header from './components/Header'
 import Produtos from './containers/Produtos'
 
 import { GlobalStyle } from './styles'
+
+import { useGetProdutosQuery } from './services/api'
+import { adicionar } from './store/carrinho'
 
 export type Produto = {
   id: number
@@ -12,6 +17,10 @@ export type Produto = {
 }
 
 function App() {
+  const dispatch = useDispatch()
+
+  const { data: produtos = [] } = useGetProdutosQuery()
+
   const [favoritos, setFavoritos] = useState<Produto[]>([])
 
   function favoritar(produto: Produto) {
@@ -23,13 +32,19 @@ function App() {
     }
   }
 
+  const adicionarAoCarrinho = (produto: Produto) => {
+    dispatch(adicionar(produto))
+  }
+
   return (
     <>
       <GlobalStyle />
       <div className="container">
         <Header favoritos={favoritos} />
         <Produtos
+          produtos={produtos}
           favoritos={favoritos}
+          adicionarAoCarrinho={adicionarAoCarrinho}
           favoritar={favoritar}
         />
       </div>

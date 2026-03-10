@@ -1,15 +1,21 @@
 import { useSelector } from 'react-redux'
-import { RootState } from '../../store'
+import { RootState } from '../../store/store'
 
 import * as S from './styles'
 
 import { Produto } from '../../App'
 
 import cesta from '../../assets/cesta.png'
-import { paraReal } from '../Produto'
 
 type Props = {
   favoritos: Produto[]
+}
+
+const paraReal = (valor: number) => {
+  return valor.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  })
 }
 
 const Header = ({ favoritos }: Props) => {
@@ -17,7 +23,7 @@ const Header = ({ favoritos }: Props) => {
     (state: RootState) => state.carrinho.itens
   )
 
-  const valorTotal = itensNoCarrinho.reduce((acc, item) => {
+  const valorTotal = itensNoCarrinho.reduce((acc: number, item: Produto) => {
     acc += item.preco
     return acc
   }, 0)
