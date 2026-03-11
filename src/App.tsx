@@ -22,15 +22,22 @@ function App() {
 
   const { data: produtos = [] } = useGetProdutosQuery()
 
-  const favoritos = useSelector(
-    (state: RootReducer) => state.favoritos.itens
-  )
+  const favoritos = useSelector((state: RootReducer) => state.favoritos.itens)
+
+  const itens = useSelector((state: RootReducer) => state.carrinho.itens)
 
   const favoritar = (produto: Produto) => {
     dispatch(alternarFavorito(produto))
   }
 
   const adicionarAoCarrinho = (produto: Produto) => {
+    const produtoExiste = itens.find((item) => item.id === produto.id)
+
+    if (produtoExiste) {
+      alert('Esse produto já está no carrinho')
+      return
+    }
+
     dispatch(adicionar(produto))
   }
 

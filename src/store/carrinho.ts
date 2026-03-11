@@ -20,7 +20,13 @@ const carrinhoSlice = createSlice({
   initialState,
   reducers: {
     adicionar: (state, action) => {
-      state.itens.push(action.payload)
+      const produto = action.payload
+
+      const produtoExiste = state.itens.find((item) => item.id === produto.id)
+
+      if (!produtoExiste) {
+        state.itens.push(produto)
+      }
     },
     remover: (state, action) => {
       state.itens = state.itens.filter((item) => item.id !== action.payload)
